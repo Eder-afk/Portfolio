@@ -1,58 +1,26 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Portafolio.Models;
+using Portafolio.Services;
 
 namespace Portafolio.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly RepositorioProyectos repositorioProyectos;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, RepositorioProyectos repositorioProyectos)
         {
             _logger = logger;
+            this.repositorioProyectos = repositorioProyectos;
         }
 
         public IActionResult Index()
         {
-            var proyectos = ObtenerProyectos().Take(3).ToList();
+            var proyectos = repositorioProyectos.ObtenerProyectos().Take(3).ToList();
             var modelo = new HomeIndexViewModel() { Proyectos = proyectos };
             return View(modelo);
-        }
-
-        private List<Proyecto> ObtenerProyectos()
-        {
-            return new List<Proyecto>()
-            {
-                new Proyecto()
-                {
-                    Titulo = "Amazon",
-                    Descripcion = "E-Commerce realizado en ASP.NET Core",
-                    Link = "https://amazon.com",
-                    ImagenURL = "/img/amazon.png"
-                },
-                new Proyecto()
-                {
-                    Titulo = "New York Times",
-                    Descripcion = "Página de noticias en React",
-                    Link = "https://nytimes.com",
-                    ImagenURL = "/img/nyt.png"
-                },
-                new Proyecto()
-                {
-                    Titulo = "Reddit",
-                    Descripcion = "Red social para compartir en comunidades",
-                    Link = "https://reddit.com",
-                    ImagenURL = "/img/reddit.png"
-                },
-                new Proyecto()
-                {
-                    Titulo = "Steam",
-                    Descripcion = "Tienda en linea para comprar videojuegos",
-                    Link = "https://store.steampowered.com",
-                    ImagenURL = "/img/steam.png"
-                }
-            };
         }
 
         public IActionResult Privacy()
